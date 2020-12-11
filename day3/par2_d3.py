@@ -48,7 +48,7 @@ print(number_of_trees(map_squares_trees,5,1))
 print(number_of_trees(map_squares_trees,7,1))
 print(number_of_trees(map_squares_trees,1,2))'''
 
-# la solucion debe ser: 9533698720
+# la solucion debe ser: 9354744432
 
 print("Total result= "+ 
     str(number_of_trees(map_squares_trees,1,1) *
