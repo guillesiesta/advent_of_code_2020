@@ -48,6 +48,7 @@ def is_valid(passport):
 
     return True
 
+# contador
 valids = 0
 # la clave:valor del diccionario me puede venir bien para analizar cada campo
 for i in passports:
@@ -58,6 +59,7 @@ for i in passports:
     for j in pas:
         a,b = j.split(":")
         current_passport_dict[a] = b
+    # valido que  el pasaporte actual esté correcto
     if is_valid(current_passport_dict):
         valids += 1
 
