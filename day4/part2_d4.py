@@ -39,6 +39,40 @@ def checkHgt(hgt):
 def checkHcl(hcl):
     return bool(re.search("^#[a-f0-9]{6}$", hcl))
 
+
+def valid(passport):
+    # Validate mandatory fields
+    fields = ['byr' ,'iyr' ,'eyr' ,'hgt' ,'hcl' ,'ecl' ,'pid']
+    for f in fields:
+        if(f not in passport):
+            return False
+
+    # Validate numerical
+    if not ( 1920 <= int(passport['byr']) <= 2002):
+        return False
+    if not ( 2010 <= int(passport['iyr']) <= 2020):
+        return False
+    if not ( 2020 <= int(passport['eyr']) <= 2030):
+        return False
+
+    # Validate Height
+    if 'cm' in passport['hgt'] and not (150 <= int(passport['hgt'][:-2]) <=193):
+        return False
+    elif 'in' in passport['hgt'] and not (59 <= int(passport['hgt'][:-2]) <= 76):
+        return False
+    if 'cm' not in passport['hgt'] and 'in' not in passport['hgt']:
+        return False
+
+    # Validate strings/enums
+    if  passport['ecl'] not in ['amb', 'blu', 'brn','gry','grn','hzl','oth']:
+        return False
+    if re.match(r'^\#[0-9a-f]{6}$', passport['hcl']) is None:
+        return False
+    if re.match(r'^\d{9}$', passport['pid']) is None:
+        return False
+
+    return True
+
 # check ecl (Eye Color) - exactly one of: amb blu brn gry grn hzl oth.
 def checkEcl(ecl):
     if(ecl=="amb" or ecl=="blu" or ecl=="brn" 
@@ -53,6 +87,7 @@ def checkPid(pid):
 # check cid (Country ID) - ignored, missing or not.
 
 invalids = 0
+valids = 0
 # la clave:valor del diccionario me puede venir bien para analizar cada campo
 for i in passports:
     passport_dict={}
@@ -62,9 +97,12 @@ for i in passports:
     for j in pas:
         a,b = j.split(":")
         passport_dict[a] = b
+    
+    if valid(passport_dict):
+        valids += 1
     # aquí debo de hacer el análisis de cada línea/pasaporte para ver que sea correcta
     # hago esta pequeña prueba para testear la funcion de antes
-
+    '''
     # primero busco los que son no válidos, que les falta cid y también otro campo
     if("cid" not in passport_dict and len(passport_dict)<=6):
         invalids = invalids + 1
@@ -89,8 +127,9 @@ for i in passports:
             continue
         if("pid" in passport_dict and not checkPid(passport_dict["pid"])):
             invalids = invalids + 1
-            continue
+            continue'''
 
 print("Total de pasaportes: "+str(len(passports)))
 print("Pasaportes inválidos: "+str(invalids))
 print("Pasaportes válidos: "+str(len(passports) - invalids))
+print("Pasaportes válidos: "+str(valids))
